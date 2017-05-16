@@ -1,13 +1,14 @@
 function initialize(app, db){
+	
 	app.get("/", function(req, res){
 		var name = req.query.name;
 		console.log("request to localhost received");
 
 		if(name === undefined){
-			res.render("index.html", {message: "Please enter you name in the url"});
+			res.render("index.html", {message: "Please enter your name in the url"});
 		}else{
 			res.render("index.html", {
-				message: "Welcome, "+name
+				message: "Welcome, "+ name
 			});
 		}	
 	});
@@ -20,7 +21,7 @@ function initialize(app, db){
                 console.log(err)
             }else {
                 console.log(results);
-
+                
                 res.json({
                 	todoList: results
                 });
@@ -30,9 +31,12 @@ function initialize(app, db){
 		
 	});
 
+
+
 	app.post("/createtodo", function(req, res){
 
-		console.log(req.body);
+		//console.log(req.body);
+		//console.log(req.body);
 
 		var date = new Date();
 
@@ -46,7 +50,7 @@ function initialize(app, db){
             if(err) {
                 console.log(err)
             }else {
-                console.log(results);
+              //  console.log(results);
                 res.json({
                 	message: "Inserted successfully"
                 });
@@ -54,7 +58,27 @@ function initialize(app, db){
         });
 
 
-	})
+	});
+
+		app.post('/delete',function(req,res){
+	       //console.log(req.body);
+	       var ObjectId = require('mongodb').ObjectID;
+	       var collection = db.collection('todoItems');
+	       collection.remove({_id:new ObjectId(req.body._id)}, function(err,results){
+	       	 if (err) {
+                    console.log(err);
+                } else {
+                  console.log("deleted");
+                  res.json({
+                  	todoList:results
+                  });
+
+                }
+               // db.close()
+	       });
+
+});
+
 }
 
 exports.initialize = initialize;

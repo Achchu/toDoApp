@@ -11,6 +11,7 @@ var MongoClient = require('mongodb').MongoClient;
 var app = express();
 app.use(bodyParser.urlencoded({
    extended: true,
+
 }));
              
 app.use(bodyParser.json({limit: '5mb'}));
@@ -21,11 +22,11 @@ app.use(express.static('./public')); //setting the folder name (public) where al
 
 app.set('view engine','html');
 app.engine('html',consolidate.underscore);
-var portNumber = 8000; //for locahost:8000
+var portNumber = 7000; //for locahost:8000
 
 http.createServer(app).listen(portNumber, function(){ //creating the server which is listening to the port number:8000, and calls a function within in which calls the initialize(app) function in the router module
 	console.log('Server listening at port '+ portNumber);
-
+	console.log('lists are sent');
 	var url = 'mongodb://localhost:27017/todoAppDb';
 
 		MongoClient.connect(url, function(err, db) { //a connection with the mongodb is established here.
@@ -35,13 +36,10 @@ http.createServer(app).listen(portNumber, function(){ //creating the server whic
 				console.log("Connected to Database");
 				routes.initialize(app, db); //function defined in routes.js which is exported to be accessed by other modules	
 			}
-			
 	});
-
-
 });
 
-console.log("hello");
+
 
 
 /* 1. Not all the template engines work uniformly with express, hence this library in js, (consolidate), is used to make the template engines work uniformly. Altough it doesn't have any 
